@@ -12,7 +12,7 @@ scale=",scale=2*iw:2*ih:flags=neighbor"
 vfilter="-vf setdar=4/3,setfield=tff$deinterlace$scale"
 
 # Comment out this like to not include the original AC3 track in the output
-#ac3pass="-map 2:a:0 -metadata:s:a:2 title=\"AC3 Surround\" -c:a:2 ac3 "
+#ac3pass="-map 2:a:0 -metadata:s:a:3 title=AC3-Surround -c:a:3 ac3 "
 
 function encode_ac3
 {
@@ -33,16 +33,18 @@ function encode_ac3
     -c:a:0 $stereo \
     -map 2:a:0 \
     -metadata:s:a:1 title="PCM Surround" \
-    -c:a:1 pcm_s16le -r:a:1 44100 \
-    $ac3pass \
+    -channel_layout:a:1 "5.1" \
+    -c:a:1 pcm_s16le -osr 44100 \
     -map 3:a:0 \
-    -metadata:s:a:3 title="Analog Left Channel" \
-    -c:a:3 $stereo  \
+    -metadata:s:a:2 title="Analog Left Channel" \
+    -c:a:2 $stereo  \
     -map_channel 3.0.0 \
+    $ac3pass \
     -map_metadata 4 \
     -map 5:s:0 \
     -c:s mov_text -metadata:s:s:0 language=eng \
-    output.mov  2>&1 | tee -a log/ffmpeg.log
+    -shortest output.mov  2>&1 | tee -a log/ffmpeg.log
+
 }
 
 
@@ -114,13 +116,16 @@ function encode_silent
     output-silent.mov  2>&1 | tee -a log/ffmpeg.log
 }
 
-if [[ -f *.ac3 ]]
+if [[ -f output.ac3 ]]
 then
+    echo "Processing with AC3, Digital, and Analog Audio"
     encode_ac3
 elif [[ -f digital-audio.pcm ]]
 then
+    echo "Processing with Digital and Analog Audio"
     encode_dstereo
 else
+    echo "Processing with Analog Audio"
     encode_astereo
 fi
 
