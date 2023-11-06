@@ -16,7 +16,7 @@ can be compressed with `flac` usin `ld-compress`.
 
 ## Decode
 
-Begin with `00-preview.sh` to check that the starting frame can be detected. If not it will need to be manually set when running `10-decode.sh`
+An automated whole disc capture will begin with the disc being read backwards to find the starting frame. Begin with `00-preview.sh` to check that the starting frame can be detected automatically. If not, add a starting sample number to begin the search from. If the start isn't found automattically, it will need to be manually set when running `10-decode.sh`
 
 ## Process
 
