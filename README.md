@@ -1,6 +1,8 @@
 # Laserdisc Ripping Workflow
-This is an overview of the process of using a Domesday Duplicator and
-ld-decode to capture and convert a laserdisc to a video file. Laserdiscs
+This is an overview of the process of using a 
+[Domesday Duplicator](https://github.com/simoninns/DomesdayDuplicator) and
+[ld-decode](https://github.com/happycube/ld-decode) 
+to capture and convert a laserdisc to a video file. Laserdiscs
 have a number of complexities and features that require determining the
 best way to decode each disc on an individual basis.
 
