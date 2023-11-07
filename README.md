@@ -55,11 +55,13 @@ frame `0` and CAV starts at frame `1`. Frame numbers are different from
 is best to have your TBC file start from the first frame of the program
 or you can have issues with the analog audio track.
 
-`00-preview.sh` provided here can help find starting frame sample which can be 
-detected automatically sometimes. A If not, `00-preview.sh` takes two 
+`00-preview.sh` provided here can help find the starting frame sample which 
+can be  detected automatically sometimes. A If not, `00-preview.sh` takes two 
 parammeters, first the starting frame number, and then the number of samples
 to skip into the raw file. `ld-decode` will seek backwards to find the starting
 frame, so overshooting the samples to let it work backwards is a good option.
+It may take multiple rounds of tweaking the starting sample to dial into the
+starting frame.
 
 `00-preview.sh` will output files into a `preview/` directory that you can
 use to verify you have the correct decode parameters. One thing to pay 
@@ -75,14 +77,14 @@ make it slower.
 
 ## Process Decoded Data
 
-`ld-decode` will procude a number of different files:  
+`ld-decode` will produce a number of different files:  
 
  - **TBC**: The timebase corrected video data
  - **PCM**: Analog audio track as signed 16 bit little endian PCM data
  - **EFM**: Digitial data track raw data
  - **TBC.JSON**: Metadata from disc
 
-The files needs to be processed again though to get some additional data.
+The files need to be processed again though to get some additional data.
 `ld-process-efm` will extract the digital audio to a similar PCM file.
 `ld-process-vbi` will extract some additional data from the TBC file that can
 be added to the JSON file. With that data added the `ld-export-metadata` can 
@@ -121,8 +123,8 @@ audio before you include it with `-f s16le -r 44.1k -ac 2`. Then you can use
 the normal `-i $filename` include it. You can then `-map` the included audio 
 files using the ID numbers for the streams (which start at 0 and include all 
 inputs). You will likely always be outputting to a single file as well. So to
-map the second files audio included to the output video you would map 
-`-map 1:a:0`. This can be done for any kind of audio inputs.  
+map the second included file's audio to the output video you would map 
+`-map 1:a:0`. This can be done for any kind of audio inputs.
   
 You may also want to adjust the channel of tracks, for AC3 discs you may want
 to convert from AC3 encoded audio to PCM and specifying 
@@ -130,8 +132,8 @@ to convert from AC3 encoded audio to PCM and specifying
 *output* audio track will correct the sample rate, re-encode it, and set it as
 5.1 surround. You will then likely want to use 
 `-filter_complex "[3:a]channelsplit=channel_layout=stereo[left][right]"` 
-where `3:a` is the *input* id. Then you can `-map "[left]"` to only include the
-left channel in your output file.
+where `3:a` is the *input* ID for the analog audio. Then you can 
+`-map "[left]"` to only include the left channel in your output file.
 
 ### Chapters and Subtitles
 
