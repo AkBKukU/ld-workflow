@@ -1,13 +1,15 @@
 #!/bin/bash
 mkdir -p log
 
+frame_start="1"
+
 if [[ "" = "$1" ]]
 then
     start=500
-    frame="-S 1"
+    frame="-S $frame_start"
 else
     start="$1"
-				 frame""
+    frame=""
 fi
 
 
