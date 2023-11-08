@@ -11,10 +11,15 @@ if [[ "60" == "$1" ]]
 then
     echo "60 FPS Deinterlacing"
     deinterlace=",dedot=m=rainbows,yadif=mode=send_field:parity=auto" # 30 to 60 correction
+elif [[ "N" == "$1" ]]
+then
+    echo "No deinterlacing"
+    deinterlac=""
 else
     echo "24 FPS Deinterlacing"
     deinterlace=",dedot=m=rainbows,fieldmatch=order=auto:field=auto,decimate" # 24 to 30 correction
 fi
+
 scale=",scale=2*iw:2*ih:flags=neighbor"
 vfilter="-vf setdar=4/3,setfield=tff$deinterlace$scale"
 #vfilter=""
