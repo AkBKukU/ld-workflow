@@ -6,7 +6,7 @@ if [[ "" = "$1" ]]
 then
     frame_start=""
 else
-    if [[ "-1" < "$1" ]]
+    if [[ "-1" != "$1" ]]
     then
         frame_start="-S $1"
     fi
