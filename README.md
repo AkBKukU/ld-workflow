@@ -49,7 +49,12 @@ using `ld-decode`. This will give you a TBC file that can be viewed with
 features your disc has.
 
 First you need to determine the starting frame of the program recorded on
-the disc. Each frame has a timecode number embedded in it. CLV starts at
+the disc. When doing an automated capture of a laserdisc using a serial 
+connection controlled by the Domesday Duplicator software the read head will 
+seek into the disc to start, then move backwards to find the start of the 
+program. This section of head movement needs to be skipped for the decode.
+
+Each frame has a timecode number embedded in it. CLV starts at
 frame `0` and CAV starts at frame `1`. Frame numbers are different from 
 "sample" numbers though which are an approximation of frame counts. It 
 is best to have your TBC file start from the first frame of the program
