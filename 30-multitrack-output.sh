@@ -34,12 +34,21 @@ function encode_ac3
 # Digital stereo is relied on for standard sound. The remaining analog
 # channel may contain a mono track or something else like commentary.
 # There may be matrix encoded dolby surround in the digital track
+
+    # Build inputs
+    if [[ -s "cc.srt" ]]
+    then
+        srt=" -i cc.srt -map 5:s:0 -c:s mov_text -metadata:s:s:0 language=eng "
+    else
+        srt=""
+    fi
+
     ld-chroma-decoder --decoder ntsc3d -p y4m -q "$input" | ffmpeg -y -i - \
     -f s16le -ar 44.1k -ac 2 -i digital-audio.pcm \
     -itsoffset 0.19 -i *.ac3 \
     -f s16le -ar $analog_rate -ac 2 -i output.pcm \
     -i ffdata \
-    -i cc.srt \
+    $srt \
     $vcodec $vfilter \
     -map 0:v:0 \
     -map 1:a:0 \
@@ -55,8 +64,6 @@ function encode_ac3
     -map_channel 3.0.0 \
     $ac3pass \
     -map_metadata 4 \
-    -map 5:s:0 \
-    -c:s mov_text -metadata:s:s:0 language=eng \
     output.mov  2>&1 | tee -a log/ffmpeg.log
 
 }
@@ -66,10 +73,20 @@ function encode_dstereo_split
 {
 # Digital stereo discs will contain two stereo tracks
 # There may be matrix encoded dolby surround in the digital track
+
+    # Build inputs
+    if [[ -s "cc.srt" ]]
+    then
+        srt=" -i cc.srt -map 4:s:0 -c:s mov_text -metadata:s:s:0 language=eng "
+    else
+        srt=""
+    fi
+
     ld-chroma-decoder --decoder ntsc3d -p y4m -q "$input" | ffmpeg -y -i - \
     -f s16le -ar 44.1k -ac 2 -i digital-audio.pcm \
     -f s16le -ar $analog_rate -ac 2 -i output.pcm \
     -i ffdata \
+    $srt \
     $vcodec $vfilter \
     -map 0:v:0 \
     -map 1:a:0 \
@@ -90,10 +107,20 @@ function encode_dstereo
 {
 # Digital stereo discs will contain two stereo tracks
 # There may be matrix encoded dolby surround in the digital track
+
+    # Build inputs
+    if [[ -s "cc.srt" ]]
+    then
+        srt=" -i cc.srt -map 4:s:0 -c:s mov_text -metadata:s:s:0 language=eng "
+    else
+        srt=""
+    fi
+
     ld-chroma-decoder --decoder ntsc3d -p y4m -q "$input" | ffmpeg -y -i - \
     -f s16le -ar 44.1k -ac 2 -i digital-audio.pcm \
     -f s16le -ar $analog_rate -ac 2 -i output.pcm \
     -i ffdata \
+    $srt \
     -map 0:v:0 \
     $vcodec $vfilter \
     -map 1:a:0 \
@@ -111,9 +138,19 @@ function encode_dstereo
 function encode_astereo
 {
 # Non-digital sound discs will contain analog stereo audio
+
+    # Build inputs
+    if [[ -s "cc.srt" ]]
+    then
+        srt=" -i cc.srt -map 3:s:0 -c:s mov_text -metadata:s:s:0 language=eng "
+    else
+        srt=""
+    fi
+
     ld-chroma-decoder --decoder ntsc3d -p y4m -q "$input" | ffmpeg -y -i - \
     -f s16le -ar $analog_rate -ac 2 -i output.pcm \
     -i ffdata \
+    $srt \
     $vcodec $vfilter\
     -map 0:v:0 \
     -map 1:a:0 \
