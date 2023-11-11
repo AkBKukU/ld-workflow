@@ -1,6 +1,12 @@
 #!/bin/bash
 mkdir -p log
 
+if [[ -s output.tbc ]]
+then
+    echo "EXITING: output.tbc exists"
+    exit 1
+fi
+
 if [[ "" = "$1" ]]
 then
     frame_start=""
