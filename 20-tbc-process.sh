@@ -1,8 +1,16 @@
 #!/bin/bash
 mkdir -p log
 
+if [[ "-d" = "$1" ]]
+then
+    dts="--dts"
+else
+    dts=""
+fi
+
+
 # Digital audio decode
-ld-process-efm *.efm digital-audio.pcm 2>&1 | tee -a log/ld-process-efm.log
+ld-process-efm $dts *.efm digital-audio.pcm 2>&1 | tee -a log/ld-process-efm.log
 
 # VBI data for CC and chapters
 ld-process-vbi *.tbc --input-json output.tbc.json --output-json output.vbi.json 2>&1 | tee -a log/ld-process-vbi.log
