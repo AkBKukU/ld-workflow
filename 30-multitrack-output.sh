@@ -68,6 +68,38 @@ function encode_ac3
 
 }
 
+function encode_dts
+{
+# DTS discs both channels of the digital audio track to hold DTS data
+# Analog stereo is relied on for standard sound.
+
+    # Build inputs
+    if [[ -s "cc.srt" ]]
+    then
+        srt=" -i cc.srt -map 4:s:0 -c:s mov_text -metadata:s:s:0 language=eng "
+    else
+        srt=""
+    fi
+
+    ld-chroma-decoder --decoder ntsc3d -p y4m -q "$input" | ffmpeg -y -i - \
+    -i digital-audio.dts \
+    -f s16le -ar $analog_rate -ac 2 -i output.pcm \
+    -i ffdata \
+    $srt \
+    $vcodec $vfilter \
+    -map 0:v:0 \
+    -map 2:a:0 \
+    -metadata:s:a:0 title="Analog Stereo" \
+    -c:a:0 $stereo -ar 44100 \
+    -map 1:a:0 \
+    -metadata:s:a:1 title="PCM Surround" \
+    -channel_layout:a:1 "5.1" \
+    -c:a:1 pcm_s16le \
+    -map_metadata 4 \
+    output.mov 2>&1 | tee -a log/ffmpeg.log
+
+}
+
 
 function encode_dstereo_split
 {
@@ -172,6 +204,10 @@ if [[ -f output.ac3 ]]
 then
     echo "Processing with AC3, Digital, and Analog Audio"
     encode_ac3
+elif [[ -f digital-audio.dts ]]
+then
+    echo "Processing with DTS and Analog Audio"
+    encode_dts
 elif [[ -f digital-audio.pcm ]]
 then
     echo "Processing with Digital and Analog Audio"
