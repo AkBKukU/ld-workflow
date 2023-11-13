@@ -4,13 +4,15 @@ mkdir -p log
 if [[ "-d" = "$1" ]]
 then
     dts="--dts"
+    audio_ext="dts"
 else
     dts=""
+    audio_ext="pcm"
 fi
 
 
 # Digital audio decode
-ld-process-efm $dts *.efm digital-audio.pcm 2>&1 | tee -a log/ld-process-efm.log
+ld-process-efm $dts *.efm digital-audio.$audio_ext 2>&1 | tee -a log/ld-process-efm.log
 
 # VBI data for CC and chapters
 ld-process-vbi *.tbc --input-json output.tbc.json --output-json output.vbi.json 2>&1 | tee -a log/ld-process-vbi.log
