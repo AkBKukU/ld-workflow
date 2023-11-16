@@ -200,15 +200,15 @@ function encode_silent
     output-silent.mov  2>&1 | tee -a log/ffmpeg.log
 }
 
-if [[ -f output.ac3 ]]
+if [[ -s output.ac3 ]]
 then
     echo "Processing with AC3, Digital, and Analog Audio"
     encode_ac3
-elif [[ -f digital-audio.dts ]]
+elif [[ -s digital-audio.dts ]]
 then
     echo "Processing with DTS and Analog Audio"
     encode_dts
-elif [[ -f digital-audio.pcm ]]
+elif [[ -s digital-audio.pcm ]]
 then
     echo "Processing with Digital and Analog Audio"
     encode_dstereo
