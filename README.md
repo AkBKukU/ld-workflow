@@ -148,11 +148,3 @@ output file. Chapters from the `--ffmetadata` option and be included with
 with `-map 5:s:0 -c:s mov_text -metadata:s:s:0 language=eng` where `5:s` is 
 the *input* ID. The `-c:s mov_text` is for an MOV file and will be different 
 for other video containers.
-
-### Audio Sync
-
-I have had some audio sync issues with the analog track. It seems to always be
-slightly slower than the video, digital, and AC3 tracks. The best way to 
-workaround this is to use a lower samplerate value when importing the PCM file, 
-I've been using between `44085` and `44089` and then resampling to `44100` 
-which "stretches" the audio to fit correctly.
