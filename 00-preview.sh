@@ -21,4 +21,11 @@ else
 fi
 
 
+# Prefer Compressed LDF if available
+if [[ -e *.ldf ]]
+then
+    time ld-decode --AC3 -s "$start" $frame_start -l 250 -t 6 *.ldf preview/preview 2>&1 | tee -a log/preview.log
+    exit $?
+fi
+
 time ld-decode --AC3 -s "$start" $frame_start -l 250 -t 6 *.lds preview/preview 2>&1 | tee -a log/preview.log

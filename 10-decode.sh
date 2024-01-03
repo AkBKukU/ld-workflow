@@ -32,4 +32,11 @@ else
     ac3=""
 fi
 
+# Prefer Compressed LDF if available
+if [[ -e *.ldf ]]
+then
+    time ld-decode $ac3 --start "$start" $frame_start -t 6 *.ldf output 2>&1 | tee -a log/ld-decode.log
+    exit $?
+fi
+
 time ld-decode $ac3 --start "$start" $frame_start -t 6 *.lds output 2>&1 | tee -a log/ld-decode.log
